@@ -4,537 +4,551 @@
 
 <HEAD>
 
-<TITLE> 此时有只猪在看 </TITLE>
+	<TITLE> 此时有只猪在看 </TITLE>
 
-<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Generator" CONTENT="EditPlus">
 
-<META NAME="Author" CONTENT="">
+	<META NAME="Author" CONTENT="">
 
-<META NAME="Keywords" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
 
-<META NAME="Description" CONTENT="">
+	<META NAME="Description" CONTENT="">
 
-<style>
+	<style>
+		html,
+		body {
 
+			height: 100%;
 
-html, body {
+			padding: 0;
 
-height: 100%;
+			margin: 0;
 
-padding: 0;
+			background: #FFF;
 
-margin: 0;
+		}
 
-background: #FFF;
+		canvas {
 
-}
+			position: absolute;
 
-canvas {
+			width: 100%;
 
-position: absolute;
+			height: 100%;
 
-width: 100%;
+		}
 
-height: 100%;
+		.img {
+			margin-top: 200px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 88888;
+		}
 
-}
-.img{
-	  margin-top: 200px;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-}
-.txt{
-	z-index:2;
-	font-size:48px;
-	position: absolute;
-	top:60%;
-	color:#FF6EC7;
-}
-
-</style>
+		.txt {
+			z-index: 888888;
+			font-size: 48px;
+			position: absolute;
+			top: 60%;
+			color: #FF6EC7;
+		}
+	</style>
 
 </HEAD>
 
 <BODY>
 
-</style>
+	</style>
 
-<div class="img">
-<audio  autoplay="autoplay" loop">
-	<source src="4.mp3" audio="" >
-</audio>
+	<div class="img">
+		<audio autoplay="autoplay" loop">
+			<source src="4.mp3" audio="">
+		</audio>
 
-<div class="txt">此时有只猪在看</div>
-<img border="0" src="bb.gif" alt="爱心发射" width="304" height="228">
-<canvas id="pinkboard"></canvas>
-		      
-	<canvas id='cas' style="background-color:rgba(0,5,24,1);">浏览器不支持canvas</canvas>
-	<div class="city"><img src="img/city.png" alt="" /></div>
-	<img src="img/moon.png" alt="" id="moon" style="visibility: hidden;"/>
-	<div style="display:none">
-		<div class="shape">新年快乐</div>
-		<div class="shape">合家幸福</div>
-        <div class="shape">万事如意</div>
-        <div class="shape">心想事成</div>
-        <div class="shape">财源广进</div>
+
+		<canvas id='cas'>浏览器不支持canvas</canvas>
+		<!-- <div class="city"><img src="img/city.png" alt="" /></div>
+	<img src="img/moon.png" alt="" id="moon" style="visibility: hidden;"/> -->
+		<div style="display:none">
+			<div class="shape">新年快乐</div>
+			<div class="shape">合家幸福</div>
+			<div class="shape">万事如意</div>
+			<div class="shape">心想事成</div>
+			<div class="shape">财源广进</div>
+		</div>
+
+
+		<div class="txt">此时有只猪在看</div>
+		<img border="0"  class="img" src="bb.gif" alt="爱心发射" width="304" height="228">
+		<canvas id="pinkboard"></canvas>
 	</div>
-</div>
 
 
-<script>
 
-/*
 
-* Settings
 
-*/
+	<script>
 
+		/*
+		
+		* Settings
+		
+		*/
 
-var settings = {
 
-particles: {
+		var settings = {
 
-length: 500, // maximum amount of particles
+			particles: {
 
-duration: 2, // particle duration in sec
+				length: 500, // maximum amount of particles
 
-velocity: 100, // particle velocity in pixels/sec
+				duration: 2, // particle duration in sec
 
-effect: -0.75, // play with this for a nice effect
+				velocity: 100, // particle velocity in pixels/sec
 
-size: 30, // particle size in pixels
+				effect: -0.75, // play with this for a nice effect
 
-},
+				size: 30, // particle size in pixels
 
-};
+			},
 
-/*
+		};
 
-* RequestAnimationFrame polyfill by Erik Möller
+		/*
+		
+		* RequestAnimationFrame polyfill by Erik Möller
+		
+		*/
 
-*/
+		(function () { var b = 0; var c = ["ms", "moz", "webkit", "o"]; for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) { window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"]; window.cancelAnimationFrame = window[c[a] + "CancelAnimationFrame"] || window[c[a] + "CancelRequestAnimationFrame"] } if (!window.requestAnimationFrame) { window.requestAnimationFrame = function (h, e) { var d = new Date().getTime(); var f = Math.max(0, 16 - (d - b)); var g = window.setTimeout(function () { h(d + f) }, f); b = d + f; return g } } if (!window.cancelAnimationFrame) { window.cancelAnimationFrame = function (d) { clearTimeout(d) } } }());
 
-(function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
+		/*
+		
+		* Point class
+		
+		*/
 
-/*
+		var Point = (function () {
 
-* Point class
+			function Point(x, y) {
 
-*/
+				this.x = (typeof x !== 'undefined') ? x : 0;
 
-var Point = (function() {
+				this.y = (typeof y !== 'undefined') ? y : 0;
 
-function Point(x, y) {
+			}
 
-this.x = (typeof x !== 'undefined') ? x : 0;
+			Point.prototype.clone = function () {
 
-this.y = (typeof y !== 'undefined') ? y : 0;
+				return new Point(this.x, this.y);
 
-}
+			};
 
-Point.prototype.clone = function() {
+			Point.prototype.length = function (length) {
 
-return new Point(this.x, this.y);
+				if (typeof length == 'undefined')
 
-};
+					return Math.sqrt(this.x * this.x + this.y * this.y);
 
-Point.prototype.length = function(length) {
+				this.normalize();
 
-if (typeof length == 'undefined')
+				this.x *= length;
 
-return Math.sqrt(this.x * this.x + this.y * this.y);
+				this.y *= length;
 
-this.normalize();
+				return this;
 
-this.x *= length;
+			};
 
-this.y *= length;
+			Point.prototype.normalize = function () {
 
-return this;
+				var length = this.length();
 
-};
+				this.x /= length;
 
-Point.prototype.normalize = function() {
+				this.y /= length;
 
-var length = this.length();
+				return this;
 
-this.x /= length;
+			};
 
-this.y /= length;
+			return Point;
 
-return this;
+		})();
 
-};
+		/*
+		
+		* Particle class
+		
+		*/
 
-return Point;
+		var Particle = (function () {
 
-})();
+			function Particle() {
 
-/*
+				this.position = new Point();
 
-* Particle class
+				this.velocity = new Point();
 
-*/
+				this.acceleration = new Point();
 
-var Particle = (function() {
+				this.age = 0;
 
-function Particle() {
+			}
 
-this.position = new Point();
+			Particle.prototype.initialize = function (x, y, dx, dy) {
 
-this.velocity = new Point();
+				this.position.x = x;
 
-this.acceleration = new Point();
+				this.position.y = y;
 
-this.age = 0;
+				this.velocity.x = dx;
 
-}
+				this.velocity.y = dy;
 
-Particle.prototype.initialize = function(x, y, dx, dy) {
+				this.acceleration.x = dx * settings.particles.effect;
 
-this.position.x = x;
+				this.acceleration.y = dy * settings.particles.effect;
 
-this.position.y = y;
+				this.age = 0;
 
-this.velocity.x = dx;
+			};
 
-this.velocity.y = dy;
+			Particle.prototype.update = function (deltaTime) {
 
-this.acceleration.x = dx * settings.particles.effect;
+				this.position.x += this.velocity.x * deltaTime;
 
-this.acceleration.y = dy * settings.particles.effect;
+				this.position.y += this.velocity.y * deltaTime;
 
-this.age = 0;
+				this.velocity.x += this.acceleration.x * deltaTime;
 
-};
+				this.velocity.y += this.acceleration.y * deltaTime;
 
-Particle.prototype.update = function(deltaTime) {
+				this.age += deltaTime;
 
-this.position.x += this.velocity.x * deltaTime;
+			};
 
-this.position.y += this.velocity.y * deltaTime;
+			Particle.prototype.draw = function (context, image) {
 
-this.velocity.x += this.acceleration.x * deltaTime;
+				function ease(t) {
 
-this.velocity.y += this.acceleration.y * deltaTime;
+					return (--t) * t * t + 1;
 
-this.age += deltaTime;
+				}
 
-};
+				var size = image.width * ease(this.age / settings.particles.duration);
 
-Particle.prototype.draw = function(context, image) {
+				context.globalAlpha = 1 - this.age / settings.particles.duration;
 
-function ease(t) {
+				context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
 
-return (--t) * t * t + 1;
+			};
 
-}
+			return Particle;
 
-var size = image.width * ease(this.age / settings.particles.duration);
+		})();
 
-context.globalAlpha = 1 - this.age / settings.particles.duration;
 
-context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
 
-};
+		/*
+		
+		* ParticlePool class
+		
+		*/
 
-return Particle;
+		var ParticlePool = (function () {
 
-})();
+			var particles,
 
+				firstActive = 0,
 
+				firstFree = 0,
 
-/*
+				duration = settings.particles.duration;
 
-* ParticlePool class
+			function ParticlePool(length) {
 
-*/
+				// create and populate particle pool
 
-var ParticlePool = (function() {
+				particles = new Array(length);
 
-var particles,
+				for (var i = 0; i < particles.length; i++)
 
-firstActive = 0,
+					particles[i] = new Particle();
 
-firstFree = 0,
+			}
 
-duration = settings.particles.duration;
+			ParticlePool.prototype.add = function (x, y, dx, dy) {
 
-function ParticlePool(length) {
+				particles[firstFree].initialize(x, y, dx, dy);
 
-// create and populate particle pool
+				// handle circular queue
 
-particles = new Array(length);
+				firstFree++;
 
-for (var i = 0; i < particles.length; i++)
+				if (firstFree == particles.length) firstFree = 0;
 
-particles[i] = new Particle();
+				if (firstActive == firstFree) firstActive++;
 
-}
+				if (firstActive == particles.length) firstActive = 0;
 
-ParticlePool.prototype.add = function(x, y, dx, dy) {
+			};
 
-particles[firstFree].initialize(x, y, dx, dy);
+			ParticlePool.prototype.update = function (deltaTime) {
 
-// handle circular queue
+				var i;
 
-firstFree++;
+				// update active particles
 
-if (firstFree == particles.length) firstFree = 0;
+				if (firstActive < firstFree) {
 
-if (firstActive == firstFree ) firstActive++;
+					for (i = firstActive; i < firstFree; i++)
 
-if (firstActive == particles.length) firstActive = 0;
+						particles[i].update(deltaTime);
 
-};
+				}
 
-ParticlePool.prototype.update = function(deltaTime) {
+				if (firstFree < firstActive) {
 
-var i;
+					for (i = firstActive; i < particles.length; i++)
 
-// update active particles
+						particles[i].update(deltaTime);
 
-if (firstActive < firstFree) {
+					for (i = 0; i < firstFree; i++)
 
-for (i = firstActive; i < firstFree; i++)
+						particles[i].update(deltaTime);
 
-particles[i].update(deltaTime);
+				}
 
-}
+				// remove inactive particles
 
-if (firstFree < firstActive) {
+				while (particles[firstActive].age >= duration && firstActive != firstFree) {
 
-for (i = firstActive; i < particles.length; i++)
+					firstActive++;
 
-particles[i].update(deltaTime);
+					if (firstActive == particles.length) firstActive = 0;
 
-for (i = 0; i < firstFree; i++)
+				}
 
-particles[i].update(deltaTime);
+			};
 
-}
+			ParticlePool.prototype.draw = function (context, image) {
 
-// remove inactive particles
+				// draw active particles
 
-while (particles[firstActive].age >= duration && firstActive != firstFree) {
+				if (firstActive < firstFree) {
 
-firstActive++;
+					for (i = firstActive; i < firstFree; i++)
 
-if (firstActive == particles.length) firstActive = 0;
+						particles[i].draw(context, image);
 
-}
+				}
 
-};
+				if (firstFree < firstActive) {
 
-ParticlePool.prototype.draw = function(context, image) {
+					for (i = firstActive; i < particles.length; i++)
 
-// draw active particles
+						particles[i].draw(context, image);
 
-if (firstActive < firstFree) {
+					for (i = 0; i < firstFree; i++)
 
-for (i = firstActive; i < firstFree; i++)
+						particles[i].draw(context, image);
 
-particles[i].draw(context, image);
+				}
 
-}
+			};
 
-if (firstFree < firstActive) {
+			return ParticlePool;
 
-for (i = firstActive; i < particles.length; i++)
+		})();
 
-particles[i].draw(context, image);
+		/*
+		
+		* Putting it all together
+		
+		*/
 
-for (i = 0; i < firstFree; i++)
+		(function (canvas) {
 
-particles[i].draw(context, image);
+			var context = canvas.getContext('2d'),
 
-}
+				particles = new ParticlePool(settings.particles.length),
 
-};
+				particleRate = settings.particles.length / settings.particles.duration, // particles/sec
 
-return ParticlePool;
+				time;
 
-})();
+			// get point on heart with -PI <= t <= PI
 
-/*
+			function pointOnHeart(t) {
 
-* Putting it all together
+				return new Point(
 
-*/
+					160 * Math.pow(Math.sin(t), 3),
 
-(function(canvas) {
+					130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
 
-var context = canvas.getContext('2d'),
+				);
 
-particles = new ParticlePool(settings.particles.length),
+			}
 
-particleRate = settings.particles.length / settings.particles.duration, // particles/sec
+			// creating the particle image using a dummy canvas
 
-time;
+			var image = (function () {
 
-// get point on heart with -PI <= t <= PI
+				var canvas = document.createElement('canvas'),
 
-function pointOnHeart(t) {
+					context = canvas.getContext('2d');
 
-return new Point(
+				canvas.width = settings.particles.size;
 
-160 * Math.pow(Math.sin(t), 3),
+				canvas.height = settings.particles.size;
 
-130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+				// helper function to create the path
 
-);
+				function to(t) {
 
-}
+					var point = pointOnHeart(t);
 
-// creating the particle image using a dummy canvas
+					point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
 
-var image = (function() {
+					point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
 
-var canvas = document.createElement('canvas'),
+					return point;
 
-context = canvas.getContext('2d');
+				}
 
-canvas.width = settings.particles.size;
+				// create the path
 
-canvas.height = settings.particles.size;
+				context.beginPath();
 
-// helper function to create the path
+				var t = -Math.PI;
 
-function to(t) {
+				var point = to(t);
 
-var point = pointOnHeart(t);
+				context.moveTo(point.x, point.y);
 
-point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
+				while (t < Math.PI) {
 
-point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+					t += 0.01; // baby steps!
 
-return point;
+					point = to(t);
 
-}
+					context.lineTo(point.x, point.y);
 
-// create the path
+				}
 
-context.beginPath();
+				context.closePath();
 
-var t = -Math.PI;
+				// create the fill
 
-var point = to(t);
+				context.fillStyle = '#ea80b0';
 
-context.moveTo(point.x, point.y);
+				context.fill();
 
-while (t < Math.PI) {
+				// create the image
 
-t += 0.01; // baby steps!
+				var image = new Image();
 
-point = to(t);
+				image.src = canvas.toDataURL();
 
-context.lineTo(point.x, point.y);
+				return image;
 
-}
+			})();
 
-context.closePath();
+			// render that thing!
 
-// create the fill
+			function render() {
 
-context.fillStyle = '#ea80b0';
+				// next animation frame
 
-context.fill();
+				requestAnimationFrame(render);
 
-// create the image
+				// update time
 
-var image = new Image();
+				var newTime = new Date().getTime() / 1000,
 
-image.src = canvas.toDataURL();
+					deltaTime = newTime - (time || newTime);
 
-return image;
+				time = newTime;
 
-})();
+				// clear canvas
 
-// render that thing!
+				context.clearRect(0, 0, canvas.width, canvas.height);
 
-function render() {
+				// create new particles
 
-// next animation frame
+				var amount = particleRate * deltaTime;
 
-requestAnimationFrame(render);
+				for (var i = 0; i < amount; i++) {
 
-// update time
+					var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
 
-var newTime = new Date().getTime() / 1000,
+					var dir = pos.clone().length(settings.particles.velocity);
 
-deltaTime = newTime - (time || newTime);
+					particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
 
-time = newTime;
+				}
 
-// clear canvas
+				// update and draw particles
 
-context.clearRect(0, 0, canvas.width, canvas.height);
+				particles.update(deltaTime);
 
-// create new particles
+				particles.draw(context, image);
 
-var amount = particleRate * deltaTime;
+			}
 
-for (var i = 0; i < amount; i++) {
+			// handle (re-)sizing of the canvas
 
-var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+			function onResize() {
 
-var dir = pos.clone().length(settings.particles.velocity);
+				canvas.width = canvas.clientWidth;
 
-particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+				canvas.height = canvas.clientHeight;
 
-}
+			}
 
-// update and draw particles
+			window.onresize = onResize;
 
-particles.update(deltaTime);
+			// delay rendering bootstrap
 
-particles.draw(context, image);
+			setTimeout(function () {
 
-}
+				onResize();
 
-// handle (re-)sizing of the canvas
+				render();
 
-function onResize() {
+			}, 10);
 
-canvas.width = canvas.clientWidth;
+		})(document.getElementById('pinkboard'));
 
-canvas.height = canvas.clientHeight;
 
-}
 
-window.onresize = onResize;
 
-// delay rendering bootstrap
 
-setTimeout(function() {
 
-onResize();
 
-render();
 
-}, 10);
 
-})(document.getElementById('pinkboard'));
 
+		// 烟花
 
 
 
-
-
-	var canvas = document.getElementById("cas");
+		var canvas = document.getElementById("cas");
 		var ocas = document.createElement("canvas");
 		var octx = ocas.getContext("2d");
 		var ctx = canvas.getContext("2d");
 		ocas.width = canvas.width = window.innerWidth;
-		ocas.height = canvas.height = 700;
+		ocas.height = canvas.height = window.innerWidth;
 		var bigbooms = [];
-	
-		window.onload = function(){
+
+		window.onload = function () {
 			initAnimate()
 		}
 
-		function initAnimate(){
+		function initAnimate() {
 			drawBg();
 
 			lastTime = new Date();
@@ -542,93 +556,93 @@ render();
 		}
 
 		var lastTime;
-		function animate(){
+		function animate() {
 			ctx.save();
 			ctx.fillStyle = "rgba(0,5,24,0.1)";
-			ctx.fillRect(0,0,canvas.width,canvas.height);
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			ctx.restore();
 
 
 			var newTime = new Date();
-            if(newTime-lastTime>500+(window.innerHeight-767)/2){
-				var random = Math.random()*100>2?true:false;
-				var x = getRandom(canvas.width/5 , canvas.width*4/5);
-				var y = getRandom(50 , 200);
-				if(random){
-					var bigboom = new Boom(getRandom(canvas.width/3,canvas.width*2/3) ,2,"#FFF" , {x:x , y:y});
+			if (newTime - lastTime > 500 + (window.innerHeight - 767) / 2) {
+				var random = Math.random() * 100 > 2 ? true : false;
+				var x = getRandom(canvas.width / 5, canvas.width * 4 / 5);
+				var y = getRandom(50, 200);
+				if (random) {
+					var bigboom = new Boom(getRandom(canvas.width / 3, canvas.width * 2 / 3), 2, "#FFF", { x: x, y: y });
 					bigbooms.push(bigboom)
 				}
 				else {
-					var bigboom = new Boom(getRandom(canvas.width/3,canvas.width*2/3) ,2,"#FFF" , {x:canvas.width/2 , y:200} , document.querySelectorAll(".shape")[parseInt(getRandom(0, document.querySelectorAll(".shape").length))]);
+					var bigboom = new Boom(getRandom(canvas.width / 3, canvas.width * 2 / 3), 2, "#FFF", { x: canvas.width / 2, y: 200 }, document.querySelectorAll(".shape")[parseInt(getRandom(0, document.querySelectorAll(".shape").length))]);
 					bigbooms.push(bigboom)
 				}
 				lastTime = newTime;
 				console.log(bigbooms)
 			}
 
-			stars.foreach(function(){
+			stars.foreach(function () {
 				this.paint();
 			})
 
-			drawMoon();
+			// drawMoon();
 
-			bigbooms.foreach(function(index){
+			bigbooms.foreach(function (index) {
 				var that = this;
-				if(!this.dead){
+				if (!this.dead) {
 					this._move();
 					this._drawLight();
 				}
-				else{
-					this.booms.foreach(function(index){
-						if(!this.dead) {
+				else {
+					this.booms.foreach(function (index) {
+						if (!this.dead) {
 							this.moveTo(index);
 						}
-						else if(index === that.booms.length-1){
+						else if (index === that.booms.length - 1) {
 							bigbooms[bigbooms.indexOf(that)] = null;
 						}
 					})
 				}
 			});
-			
+
 			raf(animate);
 		}
 
-		function drawMoon(){
-			var moon = document.getElementById("moon");
-			var centerX = canvas.width-200 , centerY = 100 , width = 80;
-			if(moon.complete){
-				ctx.drawImage(moon , centerX , centerY , width , width )
-			}
-			else {
-				moon.onload = function(){
-					ctx.drawImage(moon ,centerX , centerY , width , width)
-				}
-			}
-			var index = 0;
-			for(var i=0;i<10;i++){
-				ctx.save();
-				ctx.beginPath();
-				ctx.arc(centerX+width/2 , centerY+width/2 , width/2+index , 0 , 2*Math.PI);
-				ctx.fillStyle="rgba(240,219,120,0.005)";
-				index+=2;
-				ctx.fill();
-				ctx.restore();
-			}
-			
-		}
+		// function drawMoon() {
+		// 	var moon = document.getElementById("moon");
+		// 	var centerX = canvas.width - 200, centerY = 100, width = 80;
+		// 	if (moon.complete) {
+		// 		ctx.drawImage(moon, centerX, centerY, width, width)
+		// 	}
+		// 	else {
+		// 		moon.onload = function () {
+		// 			ctx.drawImage(moon, centerX, centerY, width, width)
+		// 		}
+		// 	}
+		// 	var index = 0;
+		// 	for (var i = 0; i < 10; i++) {
+		// 		ctx.save();
+		// 		ctx.beginPath();
+		// 		ctx.arc(centerX + width / 2, centerY + width / 2, width / 2 + index, 0, 2 * Math.PI);
+		// 		ctx.fillStyle = "rgba(240,219,120,0.005)";
+		// 		index += 2;
+		// 		ctx.fill();
+		// 		ctx.restore();
+		// 	}
 
-		Array.prototype.foreach = function(callback){
-			for(var i=0;i<this.length;i++){
-				if(this[i]!==null) callback.apply(this[i] , [i])
+		// }
+
+		Array.prototype.foreach = function (callback) {
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] !== null) callback.apply(this[i], [i])
 			}
 		}
 
 		var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) { window.setTimeout(callback, 1000 / 60); };
- 		
-		canvas.onclick = function(){
+
+		canvas.onclick = function () {
 			var x = event.clientX;
 			var y = event.clientY;
-			var bigboom = new Boom(getRandom(canvas.width/3,canvas.width*2/3) ,2,"#FFF" , {x:x , y:y});
+			var bigboom = new Boom(getRandom(canvas.width / 3, canvas.width * 2 / 3), 2, "#FFF", { x: x, y: y });
 			bigbooms.push(bigboom)
 		}
 
@@ -640,34 +654,34 @@ render();
 		// 	bigbooms.push(bigboom)
 		// })
 
-		var Boom = function(x,r,c,boomArea,shape){
+		var Boom = function (x, r, c, boomArea, shape) {
 			this.booms = [];
 			this.x = x;
-			this.y = (canvas.height+r);
+			this.y = (canvas.height + r);
 			this.r = r;
 			this.c = c;
 			this.shape = shape || false;
 			this.boomArea = boomArea;
 			this.theta = 0;
 			this.dead = false;
-			this.ba = parseInt(getRandom(80 , 200));
+			this.ba = parseInt(getRandom(80, 200));
 		}
 		Boom.prototype = {
-			_paint:function(){
+			_paint: function () {
 				ctx.save();
 				ctx.beginPath();
-				ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
+				ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
 				ctx.fillStyle = this.c;
 				ctx.fill();
 				ctx.restore();
 			},
-			_move:function(){
-				var dx = this.boomArea.x - this.x , dy = this.boomArea.y - this.y;
-				this.x = this.x+dx*0.01;
-				this.y = this.y+dy*0.01;
+			_move: function () {
+				var dx = this.boomArea.x - this.x, dy = this.boomArea.y - this.y;
+				this.x = this.x + dx * 0.01;
+				this.y = this.y + dy * 0.01;
 
-				if(Math.abs(dx)<=this.ba && Math.abs(dy)<=this.ba){
-					if(this.shape){
+				if (Math.abs(dx) <= this.ba && Math.abs(dy) <= this.ba) {
+					if (this.shape) {
 						this._shapBoom();
 					}
 					else this._boom();
@@ -677,106 +691,106 @@ render();
 					this._paint();
 				}
 			},
-			_drawLight:function(){
+			_drawLight: function () {
 				ctx.save();
 				ctx.fillStyle = "rgba(255,228,150,0.3)";
 				ctx.beginPath();
-				ctx.arc(this.x , this.y , this.r+3*Math.random()+1 , 0 , 2*Math.PI);
+				ctx.arc(this.x, this.y, this.r + 3 * Math.random() + 1, 0, 2 * Math.PI);
 				ctx.fill();
 				ctx.restore();
 			},
-			_boom:function(){
-				var fragNum = getRandom(30 , 200);
-				var style = getRandom(0,10)>=5? 1 : 2;
+			_boom: function () {
+				var fragNum = getRandom(30, 200);
+				var style = getRandom(0, 10) >= 5 ? 1 : 2;
 				var color;
-				if(style===1){
+				if (style === 1) {
 					color = {
-						a:parseInt(getRandom(128,255)),
-						b:parseInt(getRandom(128,255)),
-						c:parseInt(getRandom(128,255))
+						a: parseInt(getRandom(128, 255)),
+						b: parseInt(getRandom(128, 255)),
+						c: parseInt(getRandom(128, 255))
 					}
 				}
 
 				var fanwei = parseInt(getRandom(300, 400));
-				for(var i=0;i<fragNum;i++){
-					if(style===2){
+				for (var i = 0; i < fragNum; i++) {
+					if (style === 2) {
 						color = {
-							a:parseInt(getRandom(128,255)),
-							b:parseInt(getRandom(128,255)),
-							c:parseInt(getRandom(128,255))
+							a: parseInt(getRandom(128, 255)),
+							b: parseInt(getRandom(128, 255)),
+							c: parseInt(getRandom(128, 255))
 						}
 					}
 					var a = getRandom(-Math.PI, Math.PI);
 					var x = getRandom(0, fanwei) * Math.cos(a) + this.x;
-					var y = getRandom(0, fanwei) * Math.sin(a) + this.y; 
-					var radius = getRandom(0 , 2)
-					var frag = new Frag(this.x , this.y , radius , color , x , y );
+					var y = getRandom(0, fanwei) * Math.sin(a) + this.y;
+					var radius = getRandom(0, 2)
+					var frag = new Frag(this.x, this.y, radius, color, x, y);
 					this.booms.push(frag);
 				}
 			},
-			_shapBoom:function(){
+			_shapBoom: function () {
 				var that = this;
-				putValue(ocas , octx , this.shape , 5, function(dots){
-					var dx = canvas.width/2-that.x;
-					var dy = canvas.height/2-that.y;
-					for(var i=0;i<dots.length;i++){
-						color = {a:dots[i].a,b:dots[i].b,c:dots[i].c}
+				putValue(ocas, octx, this.shape, 5, function (dots) {
+					var dx = canvas.width / 2 - that.x;
+					var dy = canvas.height / 2 - that.y;
+					for (var i = 0; i < dots.length; i++) {
+						color = { a: dots[i].a, b: dots[i].b, c: dots[i].c }
 						var x = dots[i].x;
 						var y = dots[i].y;
 						var radius = 1;
-						var frag = new Frag(that.x , that.y , radius , color , x-dx , y-dy);
+						var frag = new Frag(that.x, that.y, radius, color, x - dx, y - dy);
 						that.booms.push(frag);
 					}
 				})
 			}
 		}
 
-		function putValue(canvas , context , ele , dr , callback){
-			context.clearRect(0,0,canvas.width,canvas.height);
+		function putValue(canvas, context, ele, dr, callback) {
+			context.clearRect(0, 0, canvas.width, canvas.height);
 			var img = new Image();
-			if(ele.innerHTML.indexOf("img")>=0){
+			if (ele.innerHTML.indexOf("img") >= 0) {
 				img.src = ele.getElementsByTagName("img")[0].src;
-				imgload(img , function(){
-					context.drawImage(img , canvas.width/2 - img.width/2 , canvas.height/2 - img.width/2);
-					dots = getimgData(canvas , context , dr);
+				imgload(img, function () {
+					context.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.width / 2);
+					dots = getimgData(canvas, context, dr);
 					callback(dots);
 				})
 			}
 			else {
 				var text = ele.innerHTML;
 				context.save();
-				var fontSize =200;
-				context.font = fontSize+"px 宋体 bold";
+				var fontSize = 200;
+				context.font = fontSize + "px 宋体 bold";
 				context.textAlign = "center";
 				context.textBaseline = "middle";
-				context.fillStyle = "rgba("+parseInt(getRandom(128,255))+","+parseInt(getRandom(128,255))+","+parseInt(getRandom(128,255))+" , 1)";
-				context.fillText(text , canvas.width/2 , canvas.height/2);
+				context.fillStyle = "rgba(" + parseInt(getRandom(128, 255)) + "," + parseInt(getRandom(128, 255)) + "," + parseInt(getRandom(128, 255)) + " , 1)";
+				context.fillText(text, canvas.width / 2, canvas.height / 2);
 				context.restore();
-				dots = getimgData(canvas , context , dr);
+				dots = getimgData(canvas, context, dr);
 				callback(dots);
 			}
 		}
 
-		function imgload(img , callback){
-			if(img.complete){
+		function imgload(img, callback) {
+			if (img.complete) {
 				callback.call(img);
 			}
 			else {
-				img.onload = function(){
+				img.onload = function () {
 					callback.call(this);
 				}
 			}
 		}
 
-		function getimgData(canvas , context , dr){
-			var imgData = context.getImageData(0,0,canvas.width , canvas.height);
-			context.clearRect(0,0,canvas.width , canvas.height);
+		function getimgData(canvas, context, dr) {
+			var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+			context.clearRect(0, 0, canvas.width, canvas.height);
 			var dots = [];
-			for(var x=0;x<imgData.width;x+=dr){
-				for(var y=0;y<imgData.height;y+=dr){
-					var i = (y*imgData.width + x)*4;
-					if(imgData.data[i+3] > 128){
-						var dot = {x:x , y:y , a:imgData.data[i] , b:imgData.data[i+1] , c:imgData.data[i+2]};
+			for (var x = 0; x < imgData.width; x += dr) {
+				for (var y = 0; y < imgData.height; y += dr) {
+					var i = (y * imgData.width + x) * 4;
+					if (imgData.data[i + 3] > 128) {
+						var dot = { x: x, y: y, a: imgData.data[i], b: imgData.data[i + 1], c: imgData.data[i + 2] };
 						dots.push(dot);
 					}
 				}
@@ -784,40 +798,40 @@ render();
 			return dots;
 		}
 
-		function getRandom(a , b){
-			return Math.random()*(b-a)+a;
+		function getRandom(a, b) {
+			return Math.random() * (b - a) + a;
 		}
 
 
-		var maxRadius = 1 , stars=[];
-		function drawBg(){
-			for(var i=0;i<100;i++){
-				var r = Math.random()*maxRadius;
-				var x = Math.random()*canvas.width;
-				var y = Math.random()*2*canvas.height - canvas.height;
-				var star = new Star(x , y , r);
+		var maxRadius = 1, stars = [];
+		function drawBg() {
+			for (var i = 0; i < 100; i++) {
+				var r = Math.random() * maxRadius;
+				var x = Math.random() * canvas.width;
+				var y = Math.random() * 2 * canvas.height - canvas.height;
+				var star = new Star(x, y, r);
 				stars.push(star);
 				star.paint()
 			}
 
 		}
 
-		var Star = function(x,y,r){
-			this.x = x;this.y=y;this.r=r;
+		var Star = function (x, y, r) {
+			this.x = x; this.y = y; this.r = r;
 		}
 		Star.prototype = {
-			paint:function(){
+			paint: function () {
 				ctx.save();
 				ctx.beginPath();
-				ctx.arc(this.x , this.y , this.r , 0 , 2*Math.PI);
-				ctx.fillStyle = "rgba(255,255,255,"+this.r+")";
+				ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+				ctx.fillStyle = "rgba(255,255,255," + this.r + ")";
 				ctx.fill();
 				ctx.restore();
 			}
 		}
 
 		var focallength = 250;
-		var Frag = function(centerX , centerY , radius , color ,tx , ty){
+		var Frag = function (centerX, centerY, radius, color, tx, ty) {
 			this.tx = tx;
 			this.ty = ty;
 			this.x = centerX;
@@ -830,26 +844,26 @@ render();
 		}
 
 		Frag.prototype = {
-			paint:function(){
+			paint: function () {
 				ctx.save();
 				ctx.beginPath();
-				ctx.arc(this.x , this.y , this.radius , 0 , 2*Math.PI);
-				ctx.fillStyle = "rgba("+this.color.a+","+this.color.b+","+this.color.c+",1)";
+				ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+				ctx.fillStyle = "rgba(" + this.color.a + "," + this.color.b + "," + this.color.c + ",1)";
 				ctx.fill()
 				ctx.restore();
 			},
-			moveTo:function(index){
-				this.ty = this.ty+0.3;
-				var dx = this.tx - this.x , dy = this.ty - this.y;
-				this.x = Math.abs(dx)<0.1 ? this.tx : (this.x+dx*0.1);
-				this.y = Math.abs(dy)<0.1 ? this.ty : (this.y+dy*0.1);
-				if(dx===0 && Math.abs(dy)<=80){
+			moveTo: function (index) {
+				this.ty = this.ty + 0.3;
+				var dx = this.tx - this.x, dy = this.ty - this.y;
+				this.x = Math.abs(dx) < 0.1 ? this.tx : (this.x + dx * 0.1);
+				this.y = Math.abs(dy) < 0.1 ? this.ty : (this.y + dy * 0.1);
+				if (dx === 0 && Math.abs(dy) <= 80) {
 					this.dead = true;
 				}
 				this.paint();
 			}
 		}
-</script>
+	</script>
 
 </BODY>
 
