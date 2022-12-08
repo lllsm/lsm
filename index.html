@@ -51,12 +51,15 @@ height: 100%;
 	top:60%;
 	color:#FF6EC7;
 }
+			body{margin:0;padding:0;overflow: hidden;}
+		.city{width:100%;position:fixed;bottom: 0px;z-index: 100;}
+		.city img{width: 100%;}
 
 </style>
 
 </HEAD>
 
-<BODY>
+<BODY onselectstart = "return false">
 
 </style>
 
@@ -69,6 +72,12 @@ height: 100%;
 <img border="0" src="bb.gif" alt="爱心发射" width="304" height="228">
 <canvas id="pinkboard"></canvas>
 		      
+
+</div>
+		      
+		      
+<div style="height:700px;overflow:hidden;">
+
 	<canvas id='cas' style="background-color:rgba(0,5,24,1);">浏览器不支持canvas</canvas>
 	<div class="city"><img src="img/city.png" alt="" /></div>
 	<img src="img/moon.png" alt="" id="moon" style="visibility: hidden;"/>
@@ -79,6 +88,7 @@ height: 100%;
         <div class="shape">心想事成</div>
         <div class="shape">财源广进</div>
 	</div>
+	
 </div>
 
 
